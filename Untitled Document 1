@@ -1,0 +1,14 @@
+http://www.classicgame.com/game/Arkanoid
+
+Titulo do preojeto: arkanoid
+Funções essenciais:
+-Movimento da Plataforma (controlada pelo jogador)
+-Movimento da bolinha (automático) 
+-Gerador de mapa
+-Contador de Pontos
+-Detector de colisâo
+-Contador de vida
+
+Tamanhos:
+- Tela : 640x480
+- Barra: 64x16
