@@ -8,6 +8,7 @@ Funções essenciais:
 -Contador de Pontos
 -Detector de colisâo
 -Contador de vida
+-Color Keying (Inserir transparências na SpriteShet)
 
 Tamanhos:
 - Tela : 640x480
