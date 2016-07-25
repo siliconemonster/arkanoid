@@ -13,8 +13,8 @@
 #define playerInitY 420
 #define ballInitX 44
 #define ballInitY 8
-#define ballVelX 1
-#define ballVelY -3
+#define ballVelX 2
+#define ballVelY -4
 #define gTile_imgW  32
 #define gTile_imgH  24
 #define mapSize 20
@@ -82,6 +82,7 @@ bool processEvents(SDL_Window* gWindow, GameState *game); //processa a fila de e
 void drawPlayer(GameState *game, int quit); //carrega e blita a imagem do jogador na superficie da mesma
 void drawBall(GameState *game, int quit);
 void drawMap(GameState *game, int quit);
+void drawBG(GameState *game, int quit);
 void movePlayer(GameState *game);
 void moveBall(GameState *game, int modulo);
 void testCollisionBallPlayer(GameState *game);
@@ -146,12 +147,12 @@ int main(int argc, char **argv)
       }
       else
       {
-		
-		Mix_PlayMusic( gMGame, -1 );
+
+		    Mix_PlayMusic( gMGame, -1 );
         gameState.player = createPlayer(playerInitX , playerInitY , gBarraSurface);
         gameState.ball = createBall ((gameState.player.posX + ballInitX ), (gameState.player.posY - ballInitY ), gBallSurface);
         gameState.level = createLevel();
-        createTile(&gameState); 
+        createTile(&gameState);
         int quit = false;
 
         while( !quit )
@@ -159,18 +160,18 @@ int main(int argc, char **argv)
               quit = processEvents(gWindow, &gameState);
 
               SDL_FillRect( gScreenSurface, NULL, SDL_MapRGB( gScreenSurface->format, 0x00, 0x00, 0x00 ) );
-              SDL_FillRect( gScreenSurface, &gameState.level, SDL_MapRGB( gScreenSurface->format, 0x00, 0x00, 0x00 ));
-			  drawMap(&gameState, quit);
+              drawBG(&gameState, quit);
+			        drawMap(&gameState, quit);
               if(gameState.player.active == true )
               {
-					drawPlayer(&gameState, quit);
-					drawBall(&gameState, quit);
-			  }	
+					           drawPlayer(&gameState, quit);
+				             drawBall(&gameState, quit);
+			        }
               SDL_UpdateWindowSurface( gWindow );
 
               SDL_Delay(1000/50);
           }
-          
+
          close_program();
         }
     }
@@ -209,24 +210,29 @@ bool init()
                     printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
                     success = false;
                 }
-            
+
             else
             {
                 gScreenSurface = SDL_GetWindowSurface( gWindow );
-                gLevelSurface = SDL_CreateRGBSurface(0, 600, 440, 32, 0x00, 0x00, 0xFF, 0);
+
             }
         }
-      
+
     }
       return success;
-   }  
+   }
 
 bool loadMedia()
 {
 
     bool success = true;
 
-
+    gLevelSurface = loadSurface("./galaxybg.png");
+    if( gLevelSurface == NULL )
+    {
+        printf( "Failed to load PNG image!\n" );
+        success = false;
+    }
     gBarraSurface = loadSurface( "./barra.png" );
     if( gBarraSurface == NULL )
     {
@@ -240,42 +246,42 @@ bool loadMedia()
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-	
-	gTileBlueSurface = loadSurface("./tileblue.png");
-	if( gTileBlueSurface == NULL )
+
+  	 gTileBlueSurface = loadSurface("./tileblue.png");
+    if( gTileBlueSurface == NULL )
     {
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-    
+
     gTileGreenSurface = loadSurface("./tilegreen.png");
 	if( gTileGreenSurface == NULL )
     {
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-    
+
     gTileRedSurface = loadSurface("./tilered.png");
 	if( gTileRedSurface == NULL )
     {
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-    
+
 	gTileYellowSurface = loadSurface("./tileyellow.png");
 	if( gTileYellowSurface == NULL )
     {
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-    
+
     gTilePinkSurface = loadSurface("./tilepink.png");
 	if( gTilePinkSurface == NULL )
     {
         printf( "Failed to load PNG image!\n" );
         success = false;
     }
-    
+
     gTileGreySurface = loadSurface("./borda.png");
 	if( gTileGreySurface == NULL )
     {
@@ -294,14 +300,14 @@ gHit2 = Mix_LoadWAV( "Hit2.wav" );
         printf( "Failed to load hit2 sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
-  
+
   gMMenu = Mix_LoadMUS( "MMenu.wav" );
     if( gMMenu == NULL )
     {
         printf( "Failed to load beat musicMENU! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
-  
+
   gMGame = Mix_LoadMUS( "MGame.wav" );
     if( gMGame == NULL )
     {
@@ -507,6 +513,19 @@ void drawMap(GameState *game, int quit)
 	}
 }
 
+void drawBG(GameState *game, int quit)
+{
+  SDL_Rect srcRect;
+  srcRect.x = 0; srcRect.y = 0;
+  srcRect.w = game->level.w;
+  srcRect.h = game->level.h;
+  if( SDL_BlitSurface( gLevelSurface, &srcRect, gScreenSurface, &game->level ) < 0 )
+  {
+    printf( "SDL could not blit! SDL Error: %s\n", SDL_GetError() );
+    quit = true;
+  }
+}
+
 void movePlayer(GameState *game)
 {
   const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -667,25 +686,25 @@ void testCollisionBallBlock(GameState *game)
 				if(game->tile[i][j].value != 0 && game->tile[i][j].value != 1)
 				{
 					//Caso 1: Teste de Colisão Inferior/Superior
-					if(  (game->ball.posX > game->tile[i][j].posX) && 
+					if(  (game->ball.posX > game->tile[i][j].posX) &&
 						   (game->ball.posX + game->ball.imgW < game->tile[i][j].posX + game->tile[i][j].imgW) )
 					{
 						if (game->ball.posY < game->tile[i][j].posY + game->tile[i][j].imgH) //Colisão Inferior
 						{
 								game->ball.velY = -(game->ball.velY);
-								game->ball.posY += game->ball.velY;	   
+								game->ball.posY += game->ball.velY;
 								game->tile[i][j].value = 0;
 								printf("Colisão inferior\n");
 						}
 						if(game->ball.posY + game->ball.imgH == game->tile[i][j].posY)
 						{
 								game->ball.velY = -(game->ball.velY);
-								game->ball.posY += game->ball.velY;	   
+								game->ball.posY += game->ball.velY;
 								game->tile[i][j].value = 0;
 								printf("Colisão superior\n");
 						}
 					}
-					//Caso 2: Colisão Lateral 
+					//Caso 2: Colisão Lateral
 					else if( (game->ball.posY > game->tile[i][j].posY) &&
 									 (game->ball.posY + game->ball.imgH < game->tile[i][j].posY + game->tile[i][j].imgH) )
 					{
@@ -703,13 +722,13 @@ void testCollisionBallBlock(GameState *game)
 									game->tile[i][j].value = 0;
 									printf("Colisão lateral direita.\n");
 								}
-										
+
 					}
-					
+
 				}
 			}
 		}
-				
+
 }
 
 void launchBall(GameState *game)
@@ -748,7 +767,7 @@ void  Restart(GameState *game)
 
 void close_program(void)
 {
-	
+
 	 SDL_FreeSurface(gScreenSurface);
 	 gScreenSurface = NULL ;
 	 SDL_FreeSurface(gLevelSurface );
@@ -769,22 +788,22 @@ void close_program(void)
     gTilePinkSurface = NULL;
     SDL_FreeSurface(gTileGreySurface);
     gTileGreySurface = NULL;
-    
+
     Mix_FreeChunk( gHit1 );
     Mix_FreeChunk( gHit2 );
     gHit1 = NULL;
-    gHit2 = NULL; 
-	 
+    gHit2 = NULL;
+
 	Mix_FreeMusic( gMMenu );
     Mix_FreeMusic( gMGame);
-    gMMenu = NULL;	 
+    gMMenu = NULL;
 	gMGame = NULL;
-	
+
 	 SDL_DestroyWindow(gWindow);
 	 gWindow = NULL ;
-	
+
 	Mix_Quit();
     IMG_Quit();
-    SDL_Quit(); 
-	 
+    SDL_Quit();
+
 	 }
