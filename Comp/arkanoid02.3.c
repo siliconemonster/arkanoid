@@ -14,7 +14,7 @@
 #define ballInitX 44
 #define ballInitY 10
 #define ballVelocidadeX 2
-#define ballVelocidadeY -3
+#define ballVelocidadeY -6
 #define ballDiametro 8
 #define gTile_imgW  32
 #define gTile_imgH  24
@@ -543,7 +543,7 @@ bool processMenuEvents()
               }
               if((e.key.keysym.sym == SDLK_UP))
               {
-                if(gMenuPointer > 0 && gMenuPointer < 4)
+                if(gMenuPointer > 0 && gMenuPointer <= 4)
                 {
                   gMenuPointer--;
                 }
@@ -555,7 +555,7 @@ bool processMenuEvents()
                   gMenuPointer++;
                 }
               }
-              if((e.key.keysym.sym) == SDLK_SPACE)
+              if((e.key.keysym.sym) == SDLK_RETURN)
               {
                 switch (gMenuPointer)
                 {
@@ -734,10 +734,29 @@ void moveBall(GameState *game, int modulo)
 
       int hitLocation = ballCentro - playerCentro;
 
-      game->ball.velX = (hitLocation%17)/SPEED_MODIFIER;
+      if(hitLocation < 0)
+      {
+        if(game->ball.velX > 0)
+        {
+          game->ball.velX /= SPEED_MODIFIER;
+        }
+        if(game->ball.velX < 0)
+        {
+          game->ball.velX *= SPEED_MODIFIER;
+        }
+      }
+      if(hitLocation > 0)
+      {
+        if(game->ball.velX > 0)
+        {
+          game->ball.velX *= SPEED_MODIFIER;
+        }
+        if(game->ball.velX < 0)
+        {
+          game->ball.velX /= SPEED_MODIFIER;
+        }
+      }
       game->ball.velY = -game->ball.velY;
-      printf("%d\n", hitLocation);
-      printf("%f\n", game->ball.velX );
     }
 
     testCollisionBallBlock(game);
@@ -745,19 +764,19 @@ void moveBall(GameState *game, int modulo)
 
 void testCollisionBallLevel(GameState *game)
 {
-    if(game->ball.posX + game->ball.imgW >= game->level.w + game->level.x) //Caso 1: Colisão com a parede direita.
+    if(game->ball.posX + game->ball.imgW > game->level.w + game->level.x) //Caso 1: Colisão com a parede direita.
     {
       game->ball.velX = -(game->ball.velX);
       game->ball.posX += game->ball.velX;
     }
 
-    if(game->ball.posX <= game->level.x) //Caso 2: Colisão com a parede esquerda.
+    if(game->ball.posX < game->level.x) //Caso 2: Colisão com a parede esquerda.
     {
       game->ball.velX = -(game->ball.velX);
       game->ball.posX += game->ball.velX;
     }
 
-    if(game->ball.posY <= game->level.y) //Caso 3: Colisão com teto.
+    if(game->ball.posY < game->level.y) //Caso 3: Colisão com teto.
     {
       game->ball.velY = -(game->ball.velY);
       game->ball.posY += game->ball.velY;
@@ -838,22 +857,22 @@ void testCollisionBallBlock(GameState *game)
     if(topo)
     {
       game->ball.velY = -game->ball.velY;
-      game->ball.posY += ballDiametro;
+      game->ball.posY += ballDiametro/2;
     }
     if(baixo)
     {
       game->ball.velY = -game->ball.velY;
-      game->ball.posY += ballDiametro;
+      game->ball.posY += ballDiametro/2;
     }
     if(esquerda)
     {
       game->ball.velX = -game->ball.velX;
-      game->ball.posX += ballDiametro;
+      game->ball.posX += ballDiametro/2;
     }
     if(direita)
     {
       game->ball.velX = -game->ball.velX;
-      game->ball.posX += ballDiametro;
+      game->ball.posX += ballDiametro/2;
     }
 
 }
