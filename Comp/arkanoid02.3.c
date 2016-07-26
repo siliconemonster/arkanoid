@@ -543,7 +543,7 @@ bool processMenuEvents()
               }
               if((e.key.keysym.sym == SDLK_UP))
               {
-                if(gMenuPointer > 0)
+                if(gMenuPointer > 0 && gMenuPointer < 4)
                 {
                   gMenuPointer--;
                 }
