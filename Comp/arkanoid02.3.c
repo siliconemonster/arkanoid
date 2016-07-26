@@ -543,21 +543,19 @@ bool processMenuEvents()
               }
               if((e.key.keysym.sym == SDLK_UP))
               {
-                if(gMenuPointer != 0)
+                if(gMenuPointer > 0)
                 {
                   gMenuPointer--;
-                  if(gMenuPointer < 0) gMenuPointer = 0;
                 }
               }
               if((e.key.keysym.sym == SDLK_DOWN))
               {
-                if(gMenuPointer != 4)
+                if(gMenuPointer < 4)
                 {
                   gMenuPointer++;
-                  if(gMenuPointer > 4) gMenuPointer = 4;
                 }
               }
-              if((e.key.keysym.sym) == SDLK_RETURN)
+              if((e.key.keysym.sym) == SDLK_SPACE)
               {
                 switch (gMenuPointer)
                 {
