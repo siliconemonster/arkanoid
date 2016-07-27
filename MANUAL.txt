@@ -1,0 +1,51 @@
+================================================================================
+BEM-VINDO AO \\ S K Y N O I D \\
+================================================================================
+
+Após um experimento multi-dimensional que deu errado, você e sua nave foram transportados
+para um lugar no Universo onde as leis da física são completamente diferentes. Contando apenas
+com a sua astúcia e com o módulo de energia da sua nave, você deve encontrar uma maneira de 
+escapar desse mundo aterrorizante!
+
+
+// COMO INSTALAR O JOGO:
+
+>Para compilar o código-fonte do Skynoid, deve-se abrir um terminal na pasta que contém o arquivo
+"skynoid.c" e digitar o seguinte comando:
+
+	@usr: ~/Skynoid$ make
+
+IMPORTANTE: Não altere ou delete o arquivo "makefile", caso contrário o jogo não poderá ser instalado.
+
+>Para jogar, clique duas vezes no ícone do executável "Skynoid" ou digite no terminal:
+
+	@usr: ~/Skynoid$ ./Skynoid
+
+IMPORTANTE: Não altere a estrutura ou o nome das pastas de jogo, assim como dos arquivos contidos nelas. Caso contrário, 
+	    o jogo, mesmo compilado, não poderá ser executado.
+		
+// COMO JOGAR:
+
+>Seu objetivo é destruir todos os blocos coloridos da fase, colidindo a bola com os mesmo. Ao mesmo tempo, deve-se 
+impedir que a bola encoste na parade inferior da tela, rebatendo-a com a barra. Caso a bola saia da tela, você perderá 
+uma vida. Caso perca todas as suas vidas (indicadas no lado direito da tela), você perderá o jogo. 
+
+>Para controlar a barra utilize as teclas direcionais do teclado (Esquerda e Direita); 
+ para lançar a bola aperte a Barra de Espaço.
+
+>Para navegar no menu inicial utilize as teclas direcionais do teclado; para escolher uma opção pressione a tecla ENTER.
+
+//AGRADECIMENTOS
+
+Professor Adriano J. O. Cruz
+Turma de Computação para Informática I de 2016.1
+Luana Gatti (Arte)
+Equipe do Simple DirectMedia Layer 2.0 (SDL2)
+Desenvolvedores do BreakOut! e Arkanoid
+http.//www.playonloop.com
+
+//GRUPO S K Y N O I D 
+
+Aline Freire de Rezende 	DRE: 116110571
+Mário Ferreira de Barros  	DRE: 116058428
+Tomaz Cuber Guimarães		DRE: 116057692
